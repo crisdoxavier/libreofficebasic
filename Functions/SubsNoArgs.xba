@@ -8,14 +8,10 @@
 
 Sub Salvar_Documento
 
-&apos; Macro retirada do arquivo OOME_4_0.odt por Andrew Pitonyak
-
 	If (ThisComponent.isModified()) Then
 	  If (ThisComponent.hasLocation() AND (Not ThisComponent.isReadOnly())) Then
 	    ThisComponent.store()
 	  Else
-	    REM Either the document does not have a location or you cannot
-	    REM save the document because the location is read-only.
 	    setModified(False)
 	  End If
 	End If
