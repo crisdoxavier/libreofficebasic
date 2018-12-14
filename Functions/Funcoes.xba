@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Funcoes" script:language="StarBasic">REM  *****  BASIC  *****
+
+
+Function fUltimaColunaPlan() as Long
+&apos;#################################################################################################
+&apos;			FUNÇÃO fUltimaColunaPlan
+&apos;#################################################################################################
+
+&apos;=================================================================================================
+&apos;		Declaração de Variáveis
+&apos;=================================================================================================
+Dim oCell As Object
+Dim oCursor As Object
+Dim aAddress As Variant
+Dim oSheet as Object
+&apos;=================================================================================================
+&apos;	Linhas de Instrução
+&apos;=================================================================================================
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Definimos a Planilha Atual
+&apos;-------------------------------------------------------------------------------------------------
+
+oSheet = ThisComponent.CurrentController.getActiveSheet
+
+
+	oCell = oSheet.GetCellbyPosition(0, 0)
+	oCursor = oSheet.createCursorByRange(oCell)
+	oCursor.GotoEndOfUsedArea(True)
+	aAddress = oCursor.RangeAddress
+	fUltimaColunaPlan = aAddress.EndColumn
+
+End Function
+
+
+Function fUltimaLinhaPlan() as Long
+&apos;#################################################################################################
+&apos;			FUNÇÃO fUltimaLinhaPlan
+&apos;#################################################################################################
+&apos;=================================================================================================
+&apos;		Declaração de Variáveis
+&apos;=================================================================================================
+Dim oCell As Object
+Dim oCursor As Object
+Dim aAddress As Variant
+Dim oSheet as Object
+&apos;=================================================================================================
+&apos;	Linhas de Instrução
+&apos;=================================================================================================
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Definimos a Planilha Atual
+&apos;-------------------------------------------------------------------------------------------------
+
+oSheet = ThisComponent.CurrentController.getActiveSheet
+
+	oCell = oSheet.GetCellbyPosition(0, 0)
+	oCursor = oSheet.createCursorByRange(oCell)
+	oCursor.GotoEndOfUsedArea(True)
+	aAddress = oCursor.RangeAddress
+	fUltimaLinhaPlan = aAddress.EndRow
+
+End Function
+
+Function fUltimaLinhaNome(oNome as String) As Long
+&apos;#################################################################################################
+&apos;			FUNÇÃO fUltimaLinhaNome
+&apos;#################################################################################################
+&apos;=================================================================================================
+&apos;		Declaração de Variáveis
+&apos;=================================================================================================
+Dim oName
+Dim oRange
+Dim oCell
+Dim oRow
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Atribui o Argumento Nome (String) à variável oName (Object)
+&apos;-------------------------------------------------------------------------------------------------
+
+oName = ThisComponent.NamedRanges.getByName(oNome)
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Pega o intervalo de Células referido pelo Nome e extrai a última linha
+&apos;-------------------------------------------------------------------------------------------------
+oRange = oName.getReferredCells
+
+oCell = oRange.getRangeAddress
+
+oRow = oCell.EndRow
+
+fUltimaLinhaNome = oRow
+
+End Function
+
+Function fUltimaColunaNome(oNome as String) As Long
+&apos;#################################################################################################
+&apos;			FUNÇÃO fUltimaColunaNome
+&apos;#################################################################################################
+&apos;=================================================================================================
+&apos;		Declaração de Variáveis
+&apos;=================================================================================================
+Dim oName
+Dim oRange
+Dim oCell
+Dim oColumn
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Atribui o Argumento Nome (String) à variável oName (Object)
+&apos;-------------------------------------------------------------------------------------------------
+
+oName = ThisComponent.NamedRanges.getByName(oNome)
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Pega o intervalo de Células referido pelo Nome e extrai a última linha
+&apos;-------------------------------------------------------------------------------------------------
+oRange = oName.getReferredCells
+
+oCell = oRange.getRangeAddress
+
+oColumn = oCell.EndColumn
+
+fUltimaColunaNome = oColumn
+
+End Function
+
+
+Function fLinhaAtualPlan() as Long
+&apos;#################################################################################################
+&apos;			FUNÇÃO fLinhaAtualPlan
+&apos;#################################################################################################
+&apos;=================================================================================================
+&apos;		Declaração de Variáveis
+&apos;=================================================================================================
+Dim Selecionado
+
+Dim SelecionadoLinha as Long
+
+Selecionado = ThisComponent.getCurrentSelection()
+
+SelecionadoLinha = Selecionado.getRangeAddress().StartRow
+
+fLinhaAtualPlan = SelecionadoLinha
+
+End Function
+
+
+Function fColunaAtualPlan() as Long
+&apos;#################################################################################################
+&apos;			FUNÇÃO fColunaAtualPlan
+&apos;#################################################################################################
+&apos;=================================================================================================
+&apos;		Declaração de Variáveis
+&apos;=================================================================================================
+
+Dim Selecionado
+
+Dim SelecionadoColuna as Long
+
+Selecionado = ThisComponent.getCurrentSelection()
+
+SelecionadoColuna = Selecionado.getRangeAddress().StartColumn
+
+fColunaAtualPlan = SelecionadoColuna
+
+End Function
+
+
+Function GetCellType(oCell) As String
+&apos;#################################################################################################
+&apos;			FUNÇÃO GetCellType
+&apos;#################################################################################################
+
+  Select Case oCell.getType() 
+  Case com.sun.star.table.CellContentType.EMPTY
+    GetCellType = &quot;Empty&quot;
+  Case com.sun.star.table.CellContentType.VALUE
+    GetCellType = &quot;Value&quot;
+  Case com.sun.star.table.CellContentType.TEXT
+    GetCellType = &quot;Text&quot;
+  Case com.sun.star.table.CellContentType.FORMULA
+    GetCellType = &quot;Formula&quot;
+  Case Else
+    GetCellType = &quot;Unknown&quot;
+  End Select 
+End Function
+</script:module>

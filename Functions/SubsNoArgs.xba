@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="SubsNoArgs" script:language="StarBasic">REM  *****  BASIC  *****
+
+&apos;#############################################################################################################################################################
+&apos;										SUB Salvar_Documento
+&apos;#############################################################################################################################################################
+
+Sub Salvar_Documento
+
+	If (ThisComponent.isModified()) Then
+	  If (ThisComponent.hasLocation() AND (Not ThisComponent.isReadOnly())) Then
+	    ThisComponent.store()
+	  Else
+	    setModified(False)
+	  End If
+	End If
+
+End Sub
+
+Sub Salvar_Backup
+
+Call Salvar_Documento
+
+
+
+End Sub
+</script:module>
