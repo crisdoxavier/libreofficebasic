@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="SubsArgs" script:language="StarBasic">REM  *****  BASIC  *****
+
+&apos;=================================================================================================
+&apos;	Declaração de Variáveis
+&apos;=================================================================================================
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Variáveis Relativas a Planilha
+&apos;-------------------------------------------------------------------------------------------------
+
+Dim PlanIndex as Integer
+Dim PlanTotal
+Dim PlanGet
+Dim PlanElementNames
+Dim PlanAtiva
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Variáveis UNO
+&apos;-------------------------------------------------------------------------------------------------
+Dim CellRangeAddress As New com.sun.star.table.CellRangeAddress
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Variáveis Long
+&apos;-------------------------------------------------------------------------------------------------
+Dim VerificaLng as Long
+Dim UltimaLinha As Long
+Dim ColunaAtual As Long
+Dim LinhaCopiada as Long
+Dim ColunaFinal as Long
+Dim LinhaAtual As Long
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Variáveis Range
+&apos;-------------------------------------------------------------------------------------------------
+Dim RangeInicial
+Dim RangeCopiada
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Variáveis String
+&apos;-------------------------------------------------------------------------------------------------
+Dim TypeCell as String
+Dim Formula As String
+
+
+&apos;#################################################################################################
+&apos;	SUB Incluir_Linha_Plan
+&apos;#################################################################################################
+
+Sub Incluir_Linha_Plan(PlanNome as String,LinhaInicial as Long, LinhasInserir as Long)
+
+PlanAtiva = Thiscomponent.CurrentController.getActiveSheet
+
+PlanNome = PlanAtiva.getName
+
+ColunaFinal = fUltimaColunaPlan()
+
+&apos;=================================================================================================
+&apos;	Linhas de Instrução
+&apos;=================================================================================================
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Salvamos a Pasta de Trabalho
+&apos;-------------------------------------------------------------------------------------------------
+&apos;	Call Salvar_Documento
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Inserimos a(s) linha(s)
+&apos;-------------------------------------------------------------------------------------------------
+	PlanAtiva.Rows.insertByIndex(LinhaInicial,LinhasInserir)
+	
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Apagamos os valores preenchidos, copiamos e editamos as fórmulas
+&apos;-------------------------------------------------------------------------------------------------
+
+LinhaCopiada = LinhaInicial -1
+	
+Dim UltimaLinha as Long
+
+UltimaLinha = LinhaInicial + LinhasInserir -1
+				
+	For LinhaAtual = LinhaInicial  To UltimaLinha Step 1
+		
+		For ColunaAtual = 0 To ColunaFinal Step 1
+				
+			RangeInicial = PlanAtiva.getCellByPosition(ColunaAtual,LinhaAtual)
+			RangeCopiada = PlanAtiva.getCellByPosition(ColunaAtual,LinhaCopiada)
+			TypeCell = GetCellType(RangeCopiada)
+					
+			If TypeCell &lt;&gt; &quot;Formula&quot; Then
+						
+			ElseIf TypeCell = &quot;Formula&quot; Then
+						
+				Formula = RangeCopiada.getFormula
+				Formula = Replace(Formula,LinhaCopiada+1,LinhaAtual+1)
+				RangeInicial.setFormula(Formula)
+						
+			End If
+					
+		Next
+				
+		LinhaCopiada = LinhaCopiada +1
+		
+	Next
+	
+
+End Sub
+&apos;#################################################################################################
+&apos;	SUB InserirCellLinhaBaixo
+&apos;#################################################################################################
+
+Sub InserirCellLinhaBaixo(PlanNome as String, LinhaInicial as Long, LinhasInserir as Long, ColunaInicial as Long, ColunaFinal as Long)
+
+
+&apos;=================================================================================================
+&apos;	Linhas de Instrução
+&apos;=================================================================================================
+
+
+PlanTotal = ThisComponent.getSheets().getCount()
+PlanGet =ThisComponent.getSheets()
+PlanElementNames = PlanGet.getElementNames(PlanIndex)
+
+For PlanIndex = 0 to PlanTotal
+
+	If PlanNome = PlanElementNames(PlanIndex) Then
+
+		Exit For
+
+	End If
+
+Next
+
+PlanAtiva = ThisComponent.getSheets().getByName(PlanNome)
+
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Verificamos se a Linha Inicial é igual à UltimaLinha
+&apos;-------------------------------------------------------------------------------------------------
+
+&apos;UltimaLinha = fUltimaLinhaPlan()
+
+&apos;	If LinhaInicial = UltimaLinha AND LinhasInserir &gt; 1 Then
+
+&apos;		LinhaInicial = UltimaLinha -1
+	
+&apos;	End If
+
+
+
+    	CellRangeAddress.Sheet = PlanIndex
+    	CellRangeAddress.StartColumn = ColunaInicial
+    	CellRangeAddress.StartRow = LinhaInicial
+    	CellRangeAddress.EndColumn = ColunaFinal
+    	CellRangeAddress.EndRow = LinhaInicial + LinhasInserir-1
+    	PlanAtiva.insertCells(CellRangeAddress, com.sun.star.sheet.CellInsertMode.DOWN)
+ 
+&apos;-------------------------------------------------------------------------------------------------
+&apos;   Apagamos os valores preenchidos, copiamos e editamos as fórmulas
+&apos;-------------------------------------------------------------------------------------------------
+
+LinhaCopiada = LinhaInicial -1
+	
+Dim UltimaLinha as Long
+
+UltimaLinha = LinhaInicial + LinhasInserir -1
+				
+	For LinhaAtual = LinhaInicial  To UltimaLinha Step 1
+		
+		For ColunaAtual = 0 To ColunaFinal Step 1
+				
+			RangeInicial = PlanAtiva.getCellByPosition(ColunaAtual,LinhaAtual)
+			RangeCopiada = PlanAtiva.getCellByPosition(ColunaAtual,LinhaCopiada)
+			TypeCell = GetCellType(RangeCopiada)
+					
+			If TypeCell &lt;&gt; &quot;Formula&quot; Then
+						
+			ElseIf TypeCell = &quot;Formula&quot; Then
+						
+				Formula = RangeCopiada.getFormula
+				Formula = Replace(Formula,LinhaCopiada+1,LinhaAtual+1)
+				RangeInicial.setFormula(Formula)
+						
+			End If
+					
+		Next
+				
+		LinhaCopiada = LinhaCopiada +1
+		
+	Next
+
+
+End Sub
+
+Sub Chamar
+
+Dim PlanAtivaNome as String
+
+PlanAtivaNome = ThisComponent.CurrentController.getActiveSheet.getName
+
+UltimaLinha = fUltimaLinhaPlan()
+
+Call Incluir_Linha_Plan(PlanAtivaNome, UltimaLinha, 3)
+&apos;Call InserirCellLinhaBaixo(PlanAtivaNome,594,1,0,13)
+
+End Sub
+</script:module>
