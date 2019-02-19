@@ -6,8 +6,8 @@ Macros para LibreOffice Basic
 * Descompacte o arquivo zip. 
 * Entre no LibreOffice. 
 * Abra o menu Ferramentas -> Macros -> Organizar Macros -> LibreOffice Basic. 
-* Clique em Organizador, guia Bibliotecas. 
-* Escolha no menu suspenso Local onde importará as Bibliotecas. 
-* Clique em importar. 
-* Vá até a pasta Functions que você acabou de descompactar.
-* Abra o arquivo script.xlb e depois clique em OK.
+* Clique em Novo. Digite o nome do arquivo .bas que você baixou
+* Apague todo o conteúdo da Janela Principal
+* Clique em Arquivo -> Importar Basic. 
+* Vá até a pasta onde você baixou o arquivo .bas.
+* Selecione o arquivo e pronto. Suas macros foram inseridas.
